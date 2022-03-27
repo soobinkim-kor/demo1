@@ -13,16 +13,23 @@ repositories {
 }
 
 dependencies {
+    //implementation: 의존 라이브러리 수정시 본 모듈까지만 재빌드한다. 본 모듈을 의존하는 모듈은 해당 라이브러리의 api 를 사용할 수 없음
+    //api: 의존 라이브러리 수정시 본 모듈을 의존하는 모듈들도 재빌드 본 모듈을 의존하는 모듈들도 해당 라이브러리의 api 를 사용할 수 있음
+    //compileOnly: 이름에서 알 수 있듯이 compile 시에만 빌드하고 빌드 결과물에는 포함하지 않는다. runtime 시 필요없는 라이브러리인 경우 (runtime 환경에 이미 라이브러리가 제공되고 있는가 하는 등의 경우)
+    //runtimeOnly: runtime 시에만 필요한 라이브러리인 경우
+    //annotationProcessor: annotation processor 명시 (ex:lombok)
+    //testImplementation : 테스트 코드를 수행할 때만 적용.
+
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-web-services'
 
-    //implementation 'org.eclipse.persistence:javax.persistence:2.2.1'
-    implementation 'org.hibernate:hibernate-annotations:3.5.6-Final'
-    implementation 'org.hibernate:hibernate-core:5.6.5-Final'
+    implementation 'org.eclipse.persistence:javax.persistence:2.2.1'
+    runtimeOnly 'org.hibernate:hibernate-annotations:3.5.6-Final'
+    runtimeOnly 'org.hibernate:hibernate-core:5.6.5-Final'
 
     runtimeOnly 'com.oracle.database.jdbc:ojdbc8:21.5.0.0'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    
+
     //Lombok Dependency
     compileOnly 'org.projectlombok:lombok:1.18.22'
     annotationProcessor 'org.projectlombok:lombok:1.18.22'
@@ -31,10 +38,17 @@ dependencies {
     testAnnotationProcessor 'org.projectlombok:lombok:1.18.22'
 
     //JPA
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa:2.6.4'
+
+    //implementation 'org.springframework.boot:spring-boot-starter-data-jpa:2.6.4'
+    // 주석처리 이유:  class "javax.persistence.SynchronizationType"'s signer information does not match signer information of other classes in the same package
+    // 해결: spring-data-jpa 로 변경
+    implementation 'org.springframework.data:spring-data-jpa:2.6.2'
+
     implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
     implementation 'org.springframework.boot:spring-boot-starter-data-rest'
 
+    // 안될때 추가해보기
+    compileOnly 'javax.xml.bind:jaxb-api:2.4.0-b180830.0359'
 }
 
 tasks.named('test') {
